@@ -22,6 +22,9 @@ export default function Landing() {
     navigation.navigate("GiveClasses");
   }
 
+  function handleNavigationStudy() {
+    navigation.navigate("Study");
+  }
   return (
     <Container>
       <Logo source={logo} style={{ resizeMode: "contain" }} />
@@ -30,7 +33,10 @@ export default function Landing() {
         <TitleBold> O que deseja fazer?</TitleBold>
       </Title>
       <BoxButton>
-        <Button onPress={() => {}} style={{ backgroundColor: "#9871f5" }}>
+        <Button
+          onPress={handleNavigationStudy}
+          style={{ backgroundColor: "#9871f5" }}
+        >
           <Icon source={iconStudy} />
           <TextButton>Estudar</TextButton>
         </Button>
