@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Logo,
@@ -15,7 +15,21 @@ import logo from "../../assets/images/landing.png";
 import iconStudy from "../../assets/images/icons/study.png";
 import iconClasses from "../../assets/images/icons/give-classes.png";
 import iconHeart from "../../assets/images/icons/heart.png";
+import api from "../../services/api";
 export default function Landing() {
+  const [connections, setConnecitons] = useState(0);
+  useEffect(() => {
+    getConnections();
+  }, []);
+
+  async function getConnections() {
+    const result = await api.get("connections");
+
+    if (result.status) {
+      setConnecitons(result.data.total);
+    }
+  }
+
   const navigation = useNavigation();
 
   function handleNavigationtoGiveClassesPage() {
@@ -49,7 +63,8 @@ export default function Landing() {
         </Button>
       </BoxButton>
       <TotalConnections>
-        Total de 200 conexões já realizadas <Icon source={iconHeart} />
+        Total de {connections} conexões já realizadas{" "}
+        <Icon source={iconHeart} />
       </TotalConnections>
     </Container>
   );
