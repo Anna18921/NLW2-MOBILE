@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   BoxProfile,
@@ -10,44 +10,96 @@ import {
   Footer,
   Price,
   BoxButtons,
-  Button,
   TextButton,
   Icon,
   Value,
   FavoriteButton,
   ContactButton,
 } from "./styles";
+import { Linking } from "react-native";
 import heartOutlineIcon from "../../assets/images/icons/heart-outline.png";
 import unfavoriteIcon from "../../assets/images/icons/unfavorite.png";
 import whatsapp from "../../assets/images/icons/whatsapp.png";
+import AsyncStora from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-community/async-storage";
+import api from "../../services/api";
 
-export default function TeacherItem() {
+export interface Teacher {
+  id: number;
+  avatar: string;
+  bio: string;
+  cost: number;
+  name: string;
+  subject: string;
+  whatsapp: string;
+}
+interface TeacherItemProps {
+  teacher: Teacher;
+  favorited: boolean;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ favorited, teacher }) => {
+  const [isFavorited, setIsFavorited] = useState(favorited);
+
+  function handleContactWhatsApp() {
+    api.post("connections", {
+      user_id: teacher.id,
+    });
+
+    Linking.openURL(`whatsapp://send?phone=+55${teacher.whatsapp}`);
+  }
+
+  async function handleToggleFavorite() {
+    const favorites = await AsyncStorage.getItem("favorites");
+    let favoritesArray = [];
+
+    if (favorites) {
+      favoritesArray = JSON.parse(favorites);
+    }
+
+    if (isFavorited) {
+      const favoriteIndex = favoritesArray.findIndex((teacherItem: Teacher) => {
+        return teacherItem.id === teacher.id;
+      });
+
+      favoritesArray.splice(favoriteIndex, 1);
+
+      setIsFavorited(false);
+    } else {
+      favoritesArray.push(teacher);
+      setIsFavorited(true);
+    }
+
+    await AsyncStorage.setItem("favorites", JSON.stringify(favoritesArray));
+  }
+
   return (
     <Container>
       <BoxProfile>
-        <Avatar source={{ uri: "http://github.com/Anna18921.png" }} />
+        <Avatar source={{ uri: teacher.avatar }} />
         <Description>
-          <Name>Anna Rafaela</Name>
-          <Subject>Algoritmos</Subject>
+          <Name>{teacher.name}</Name>
+          <Subject>{teacher.subject}</Subject>
         </Description>
       </BoxProfile>
-      <Bio>
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-        below for those interested. Sections 1.10.32 and 1.10.33 from "de
-        Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
-        original form, accompanied by English versions from the 1914 translation
-        by H. Rackham.
-      </Bio>
+      <Bio>{teacher.bio}</Bio>
       <Footer>
         <Price>
           Preço/Hora{"  "}
-          <Value>R$ 20,00</Value>
+          <Value>R$ {teacher.cost}</Value>
         </Price>
         <BoxButtons>
-          <FavoriteButton>
-            <Icon source={heartOutlineIcon} />
+          <FavoriteButton
+            style={{ backgroundColor: isFavorited ? "#ff3333" : "#8257e5" }}
+            onPress={handleToggleFavorite}
+          >
+            {isFavorited ? (
+              <Icon source={unfavoriteIcon} />
+            ) : (
+              <Icon source={heartOutlineIcon} />
+            )}
           </FavoriteButton>
-          <ContactButton>
+          <ContactButton onPress={handleContactWhatsApp}>
             <Icon source={whatsapp} />
             <TextButton>Entrar em Contato</TextButton>
           </ContactButton>
@@ -55,4 +107,6 @@ export default function TeacherItem() {
       </Footer>
     </Container>
   );
-}
+};
+
+export default TeacherItem;

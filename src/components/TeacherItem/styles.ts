@@ -75,7 +75,6 @@ export const BoxButtons = styled.View`
 `;
 
 export const FavoriteButton = styled.TouchableOpacity`
-  background-color: #8257e5;
   width: 36px;
   height: 36px;
   border-radius: 8px;
