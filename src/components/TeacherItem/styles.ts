@@ -17,6 +17,7 @@ export const BoxProfile = styled.View`
 
 export const Description = styled.View`
   margin-left: 16px;
+  width: 85%;
 `;
 
 export const Avatar = styled.Image`
@@ -32,6 +33,8 @@ export const Name = styled.Text`
   font-family: "Archivo_700Bold";
   font-size: 20px;
   color: #32264d;
+  width: 95%;
+  flex-wrap: wrap;
 `;
 
 export const Subject = styled.Text`

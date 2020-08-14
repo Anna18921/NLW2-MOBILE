@@ -4,6 +4,15 @@ export const Container = styled.View`
   flex: 1;
 `;
 
+export const ViewLoad = styled.View`
+  padding-top: 40px;
+  align-items: center;
+  justify-content: flex-start;
+
+  height: 100%;
+`;
+export const Load = styled.ActivityIndicator``;
+
 export const ScrollView = styled.ScrollView`
   margin-top: -30px;
 `;
