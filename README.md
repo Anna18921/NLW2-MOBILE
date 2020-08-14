@@ -6,6 +6,7 @@
   
 2. Instalação: 
   - git clone https://github.com/Anna18921/NLW2-MOBILE.git
+  - instalar dependẽncia: yarn add
   -  Execução do Mobile: yarn start
   - Utilize o expo para executar o projeto no emulador ou dispositivo fisico
   
